@@ -80,12 +80,12 @@ bool_t delayRead(delay_t * delay)
 	{
 		if(HAL_GetTick()-delay->startTime>=delay->duration)//compara la delta del tiempo actual contra la duracion en ms
 			{
-			delay->running=false;
-			return true;
+			delay->running=false;//si se ha cumplido la condicion el retardo cambia false
+			return true;//retorna un valor verdadero y regresa
 
 			}
 	}
-	return false;
+	return false;//si no se ha cumplido la condicion de tiempo, retorna falso
 }
 
 void delayWrite(delay_t*delay, tick_t duration)
@@ -119,12 +119,13 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 
-  tick_t duration[3]={1000/2,200/2,100/2};//arreglo con los tiempos
+  tick_t const duration[3]={1000/2,200/2,100/2};//arreglo con los tiempos
   delay_t delay;						// estructura de el retardo
   delay_t* p_delay=&delay;				//puntoro a la estructura
   delayInit(p_delay, duration[0]);		//inicializacion de la estructura del retardo
   bool_t state;							//estado del retardo, permite conocer si ha alcanzado el tiempo
-  uint8_t i=0,j=0,parpadeo=10;// 10 para 5 parpadeos, se debe colocar el doble
+  uint8_t i=0,j=0;
+  uint8_t const parpadeo=10;// 10 para 5 parpadeos, se debe colocar el doble
 
 
   /* USER CODE END 2 */
@@ -134,20 +135,19 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  	  state=delayRead(p_delay);//se obtiene el estado el retardo
-	  	  delayWrite(p_delay,duration[j]);//se escribe el valor de la duracion a traves de un arreglo,
-		  if(state)
+	  	  state=delayRead(p_delay);//se obtiene el estado el retardo, es verdadera si se ha alcanzo el tiempo solicitado
+	  	  delayWrite(p_delay,duration[j]);//modifica el valor de la duracion de delay a traves de un arreglo,
+		  if(state)//entra a la condicion cada vez que la funcion delayRead es verdadera
 		  {
-
 			  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);//pin13 del puerto C, prende y apaga
-			  i++;										//veces que ha entrado el el ciclo
+			  i++;										//veces que ha entrado en el ciclo
 		  }
 		  if(i>parpadeo)
 		  {
-			  i=0;
+			  i=0;//si se ha cumplido la condicion de parpadeos reinicia el contador i a cero
 			  j++;
 			  if(j>(sizeof (duration)/sizeof (duration[0]) -1))// limita al numero maximo de rutinas
-				  j=0;
+				  j=0;//si se ha alcanzado la maxima cantidad de rutinas reinicia a la primera
 		  }
 
 
