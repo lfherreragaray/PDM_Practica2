@@ -146,7 +146,7 @@ int main(void)
 		  if(i>parpadeo)
 		  {
 			  i=0;//si se ha cumplido la condicion de parpadeos reinicia el contador i a cero
-			  j++;
+			  j++;//contador para llevar control de las veces que ha parpadeado
 			  if(j>(sizeof (duration)/sizeof (duration[0]) -1))// limita al numero maximo de rutinas
 				  j=0;//si se ha alcanzado la maxima cantidad de rutinas reinicia a la primera
 		  }
