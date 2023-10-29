@@ -119,7 +119,8 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 
-  tick_t const duration[3]={1000/2,200/2,100/2};//arreglo con los tiempos
+  tick_t const cicloDeTrabajo =2; //ciclo de trabajo =1/ct
+  tick_t const duration[3]={1000/cicloDeTrabajo,200/cicloDeTrabajo,100/cicloDeTrabajo};//arreglo con los tiempos
   delay_t delay;						// estructura de el retardo
   delay_t* p_delay=&delay;				//puntoro a la estructura
   delayInit(p_delay, duration[0]);		//inicializacion de la estructura del retardo
