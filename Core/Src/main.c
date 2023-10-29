@@ -71,14 +71,14 @@ void delayInit( delay_t * delay, tick_t duration )
 
 bool_t delayRead(delay_t * delay)
 {
-	if(delay->running==false)
+	if(delay->running==false)//si no esta en delay, entra
 	{
 		delay->running=true;
-		delay->startTime=HAL_GetTick();
+		delay->startTime=HAL_GetTick();//obtiene el tiempo actual
 	}
 	else
 	{
-		if(HAL_GetTick()-delay->startTime>=delay->duration)
+		if(HAL_GetTick()-delay->startTime>=delay->duration)//compara la delta del tiempo actual contra la duracion en ms
 			{
 			delay->running=false;
 			return true;
@@ -90,7 +90,7 @@ bool_t delayRead(delay_t * delay)
 
 void delayWrite(delay_t*delay, tick_t duration)
 {
-	delay->duration=duration;
+	delay->duration=duration;//permite cambiar el valor de duracion
 }
 
 int main(void)
@@ -119,12 +119,12 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 
-  tick_t duration[3]={1000/2,200/2,100/2};
-  delay_t delay;
-  delay_t* p_delay=&delay;
-  delayInit(p_delay, duration[0]);
-  bool_t state;
-  uint8_t i=0,j=0,parpadeo=10;//un parpadeo consiste de apagar
+  tick_t duration[3]={1000/2,200/2,100/2};//arreglo con los tiempos
+  delay_t delay;						// estructura de el retardo
+  delay_t* p_delay=&delay;				//puntoro a la estructura
+  delayInit(p_delay, duration[0]);		//inicializacion de la estructura del retardo
+  bool_t state;							//estado del retardo, permite conocer si ha alcanzado el tiempo
+  uint8_t i=0,j=0,parpadeo=10;// 10 para 5 parpadeos, se debe colocar el doble
 
 
   /* USER CODE END 2 */
@@ -134,19 +134,19 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  	  state=delayRead(p_delay);
-	  	  delayWrite(p_delay,duration[j]);
+	  	  state=delayRead(p_delay);//se obtiene el estado el retardo
+	  	  delayWrite(p_delay,duration[j]);//se escribe el valor de la duracion a traves de un arreglo,
 		  if(state)
 		  {
 
-			  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);//pin13 del puerto C
-			  i++;
+			  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);//pin13 del puerto C, prende y apaga
+			  i++;										//veces que ha entrado el el ciclo
 		  }
 		  if(i>parpadeo)
 		  {
 			  i=0;
 			  j++;
-			  if(j>(sizeof (duration)/sizeof (duration[0]) -1))
+			  if(j>(sizeof (duration)/sizeof (duration[0]) -1))// limita al numero maximo de rutinas
 				  j=0;
 		  }
 
